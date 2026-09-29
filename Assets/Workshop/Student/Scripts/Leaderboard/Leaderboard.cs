@@ -29,30 +29,66 @@ namespace Searching
             RecordScore(new PlayerScore("Kevin", 275));
             RecordScore(new PlayerScore("Nina", 350));
             RecordScore(new PlayerScore("Mona", 325));
-            
+            PrintScores();
         }
 
         public void RecordScore(PlayerScore score)
         {
-            // [1] sequential search if the player is already in the list
-
-           
-            // [2] find index to insert that make the scores list sorted with binary search
             
+            int index = -1;
+            for (int i = 0; i < scores.Count; i++)
+            {
+                if (scores[i].playerName == score.playerName)
+                {
+                    index = i;
+                    break;
+                }
+            }
 
-            // [3] If the score is not found, insert it at the appropriate index
-           
+            if (index != -1)
+            {
+                scores.RemoveAt(index);
+            }
+            
+            index = -1;
+            int left = 0;
+            int right = scores.Count - 1;
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+                if (scores[mid].score == score.score)
+                {
+                    index = mid;
+                    break;
+                }
+                else if (scores[mid].score < score.score)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
 
+            
+            if (index == -1)
+            {
+                index = left;
+            }
+
+            scores.Insert(index, score);
         }
 
         public void PrintScores()
         {
-            // join all score as string and print it
+           
             string allScores = scores.Aggregate("", (acc, score) => acc + score.score.ToString() + ",");
             Debug.Log(allScores);
-            
+
         }
-        public void ShowleaderBoard() {
+        public void ShowleaderBoard()
+        {
             foreach (var score in scores)
             {
                 UIPlayerScore uIScore = Instantiate(UIScore, UiParent).GetComponent<UIPlayerScore>();
