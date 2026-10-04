@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assignment
@@ -102,17 +103,71 @@ namespace Assignment
 
         public int[] AS01_FindFirstAndLastElementOfArray(int[] array, int target)
         {
-            throw new NotImplementedException();
+            if (array == null || array.Length == 0)
+                return new int[] { -1 };
+
+            int first = -1;
+            int last = -1;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == target)
+                {
+                    if (first == -1)
+                    {
+                        first = i;
+                    }
+                    last = i;
+                }
+            }
+
+            if (first == -1)
+            {
+                return new int[] { -1 };
+            }
+
+            return new int[] { first, last };
         }
 
         public int AS02_FindMaxLessThan(int[] array, int target)
         {
-            throw new NotImplementedException();
+            if (array == null || array.Length == 0)
+                return -1;
+
+            int maxVal = int.MinValue;
+            bool found = false;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] < target)
+                {
+                    if (!found || array[i] > maxVal)
+                    {
+                        maxVal = array[i];
+                        found = true;
+                    }
+                }
+            }
+
+            return found ? maxVal : -1;
         }
 
         public int[] AS03_FindRange(int[] array, int min, int max)
         {
-            throw new NotImplementedException();
+            if (array == null || min > max)
+                return new int[0];
+
+            List<int> result = new List<int>();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] >= min && array[i] <= max)
+                {
+                    result.Add(array[i]);
+                }
+            }
+
+            return result.ToArray();
         }
 
         #endregion
@@ -121,7 +176,29 @@ namespace Assignment
 
         public int[] EX01_FindTargetEnemies(int[] enemyHPs, int mana)
         {
-            throw new NotImplementedException();
+            if (enemyHPs == null || enemyHPs.Length == 0 || mana <= 0)
+                return new int[0];
+
+            int[] sortedHPs = (int[])enemyHPs.Clone();
+            Array.Sort(sortedHPs);
+
+            List<int> selectedEnemies = new List<int>();
+            int currentManaSum = 0;
+
+            for (int i = 0; i < sortedHPs.Length; i++)
+            {
+                if (currentManaSum + sortedHPs[i] <= mana)
+                {
+                    currentManaSum += sortedHPs[i];
+                    selectedEnemies.Add(sortedHPs[i]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return selectedEnemies.ToArray();
         }
 
         #endregion
